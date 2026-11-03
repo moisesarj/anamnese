@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anamnese — Treinador Araújo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
+   override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+  --success: #0a7a35;
+  --danger: #c0262d;
+  --warning: #8a5300;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+/* Pages generated before the shell had its own components still link the
+   basecoat CDN, which reads its own tokens and switches theme only on a
+   .dark class. Bridged to the shell's, whatever of it those pages use takes
+   the page's accent and follows the declared theme. Its --accent token is a
+   hover tint, renamed in its theme as --color-accent; the shell's --accent is
+   the brand colour, so the tint is derived from it here. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-contrast);
+  --secondary: color-mix(in srgb, var(--text) 7%, var(--surface));
+  --secondary-foreground: var(--text);
+  --muted: color-mix(in srgb, var(--text) 5%, var(--surface));
+  --muted-foreground: var(--text-muted);
+  --color-accent: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --color-accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+* { box-sizing: border-box; }
+/* The reset the pages were written against: they all linked basecoat, which
+   ships Tailwind's. Its components now live here, so the reset does too. */
+*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }
+/* Preflight's rule too: without it a component class that sets display
+   (.alert, .card, .btn…) beats the hidden attribute and shows the element. */
+[hidden]:where(:not([hidden="until-found"])) { display: none !important; }
+.hidden { display: none !important; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: inherit; }
+b, strong { font-weight: bolder; }
+ol, ul, menu { list-style: none; }
+svg, video, canvas, iframe { display: block; vertical-align: middle; }
+button, input, select, textarea { color: inherit; background-color: transparent; border-radius: 0; }
+table { border-collapse: collapse; }
+hr { height: 0; color: inherit; border-top-width: 1px; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: clamp(22px, 2.3vw, 28px); font-weight: 650; line-height: 1.1; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: var(--success); }
+.kpi .kpi-delta.down { color: var(--danger); }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 12px; font-size: 12.5px; color: var(--text-muted); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.chart-legend b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge, .eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+/* A pill keeps its content width inside flex and grid columns, which would
+   otherwise stretch it across the card; a centred parent still centres it. */
+.shell-badge, .eyebrow, .badge { width: fit-content; max-width: 100%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* Layout and type utilities: what the pages kept spelling in style="".
+   Spacing and type sizes follow Tailwind's scale; there is no Tailwind. */
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stack { display: flex; flex-direction: column; gap: var(--space); }
+.between { justify-content: space-between; }
+.grow { flex: 1 1 0; min-width: 0; }
+.cols-2, .cols-3, .cols-4, .cols-5 { display: grid; gap: var(--space); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .cols-2, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) { .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.m-0 { margin: 0; }
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; }
+.text-xs { font-size: 12px; } .text-sm { font-size: 14px; } .text-base { font-size: 16px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 20px; line-height: 1.35; }
+.text-2xl { font-size: 24px; line-height: 1.25; } .text-3xl { font-size: 30px; line-height: 1.2; }
+.font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+.text-right { text-align: right; } .text-center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.w-full { width: 100%; }
+.text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+
+/* Components, with basecoat 1.0 markup (variants and sizes are data
+   attributes) and the shell tokens, so a page needs neither component CSS
+   nor a CSS framework. An older page that also links basecoat gets these
+   rules after it, over the same properties. */
+button, input, select, textarea { font: inherit; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px);
+  background: var(--accent); color: var(--accent-contrast);
+  font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.btn[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.btn[data-variant="secondary"]:hover { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
+.btn[data-variant="outline"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn[data-variant="ghost"] { background: transparent; color: var(--text); }
+.btn[data-variant="outline"]:hover, .btn[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.btn[data-variant="destructive"] { background: var(--danger); color: var(--bg); }
+.btn[data-variant="destructive"]:hover { background: color-mix(in srgb, var(--danger) 86%, var(--text)); }
+.btn[data-variant="link"] { height: auto; padding: 0; background: none; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="sm"] { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn[data-size="lg"] { height: 42px; padding: 0 20px; font-size: 15px; }
+.btn[data-size="icon"] { width: 36px; padding: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 1px solid transparent; border-radius: 999px; background: var(--accent); color: var(--accent-contrast);
+  font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap;
+}
+.badge[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.badge[data-variant="outline"] { background: transparent; color: var(--text); border-color: var(--border); }
+.badge[data-variant="destructive"] { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
+
+.alert {
+  display: grid; gap: 4px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+.alert h2, .alert h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.alert p, .alert section { margin: 0; color: var(--text-muted); }
+.alert[data-variant="destructive"] { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); color: var(--danger); }
+
+.card {
+  display: flex; flex-direction: column; gap: 16px; padding: 20px 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.card > header, .card > section, .card > footer { padding: 0 20px; }
+.card > header { display: grid; gap: 4px; }
+.card > header h2, .card > header h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.3; }
+.card > header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+.card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.input {
+  width: 100%; min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field [role="alert"] { color: var(--danger); font-size: 13px; }
+
+dialog.dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: auto; padding: 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+dialog.dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog.dialog > div { display: grid; gap: 16px; padding: 24px; }
+dialog.dialog header { display: grid; gap: 4px; }
+dialog.dialog header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+dialog.dialog header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+dialog.dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+.tabs { display: grid; gap: 12px; }
+.tabs > [role="tablist"] {
+  display: inline-flex; gap: 4px; width: fit-content; max-width: 100%; padding: 4px; overflow-x: auto;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--text) 6%, var(--surface));
+}
+.tabs [role="tab"] {
+  padding: 6px 12px; border: 0; border-radius: calc(var(--radius) - 4px); background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+.tabs [role="tab"][aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.tabs [role="tabpanel"][hidden] { display: none; }
+
+.accordion > details { border-bottom: 1px solid var(--border); }
+.accordion > details > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; font-weight: 500; list-style: none; cursor: pointer;
+}
+.accordion > details > summary::-webkit-details-marker { display: none; }
+.accordion > details > summary::after { content: "+"; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.accordion > details[open] > summary::after { content: "\2212"; }
+.accordion > details > :not(summary) { margin: 0 0 14px; color: var(--text-muted); }
+
+.toaster {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column-reverse; gap: 8px;
+  width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+.toaster .toast { pointer-events: auto; transition: opacity 200ms ease, transform 200ms ease; }
+.toaster .toast[aria-hidden="true"] { opacity: 0; transform: translateY(8px); }
+.toaster .toast-content {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 13px;
+}
+.toaster .toast-content h2 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+.toaster .toast-content p { margin: 0; color: var(--text-muted); }
+
+/* skipUI building blocks. */
+.skip-table-search { max-width: 320px; margin-bottom: 12px; }
+.skip-table-wrap { overflow-x: auto; }
+table.shell-table th[data-sort] { cursor: pointer; user-select: none; }
+table.shell-table th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 9px; }
+table.shell-table th[aria-sort="descending"]::after { content: " \25BC"; font-size: 9px; }
+table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: center; padding: 24px 0; }
+.skip-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.toaster .toast[data-type="success"] .toast-content { border-left: 3px solid var(--success); }
+.toaster .toast[data-type="error"] .toast-content { border-left: 3px solid var(--danger); }
+
+</style>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); },
+    compact: function (v) { return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(v); },
+    brlCompact: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisLabels formats the five y-axis ticks in the unit the chart declared
+  // (percent, BRL or plain numbers), compact so long values never clip, with
+  // the fewest decimals that still print every tick exactly (1,5 mi, not 2 mi).
+  function axisLabels(format, ticks) {
+    function at(digits) {
+      var opts = { notation: "compact", maximumFractionDigits: digits };
+      if (format === "pct") opts = { style: "percent", maximumFractionDigits: digits };
+      else if (format === "brl") opts = { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: digits };
+      var nf = new Intl.NumberFormat("pt-BR", opts);
+      return ticks.map(function (t) { return nf.format(t); });
+    }
+    for (var digits = 0; digits < 2; digits++) {
+      if (at(digits).join("|") === at(digits + 1).join("|")) return at(digits);
+    }
+    return at(2);
+  }
+
+  // yAxisPad formats the ticks and measures the left padding they need from
+  // the longest one; drawYAxis then draws the grid and the labels.
+  function yAxisPad(format, max) {
+    var labels = axisLabels(format, [0, max / 4, max / 2, (max * 3) / 4, max]);
+    var longest = labels.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
+    return { labels: labels, padL: Math.max(40, Math.round(longest * 6.2) + 14) };
+  }
+  function drawYAxis(svg, axis, W, padR, padT, plotH) {
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: axis.padL, y1: gy, x2: W - padR, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: axis.padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axis.labels[g];
+      svg.appendChild(lbl);
+    }
+  }
+
+  // xLabelStep: show every k-th category label so labels never overlap, and
+  // always the last one (counted back from the end).
+  function xLabelStep(labels, step) {
+    var longest = labels.reduce(function (m, l) { return Math.max(m, String(l).length); }, 0);
+    return Math.max(1, Math.ceil((longest * 6.4 + 8) / Math.max(step, 1)));
+  }
+  function drawXLabel(svg, text, x, y, W, edgeGuard) {
+    var anchor = "middle";
+    var half = String(text).length * 3.2;
+    if (edgeGuard && x - half < 4) anchor = "start";
+    if (edgeGuard && x + half > W - 4) anchor = "end";
+    var tx = svgEl("text", { x: x, y: y, "text-anchor": anchor, "font-size": 11, fill: mutedColor() });
+    tx.textContent = text;
+    svg.appendChild(tx);
+  }
+  // categoryLines fits a bar's category name in its slot: one line, two lines
+  // split at a space, or cut with "…". A bar without its name can't be read, so
+  // categories are never skipped; null when the slot is too narrow for that.
+  function categoryLines(text, slot) {
+    var fit = Math.floor((slot - 6) / 6.4);
+    var s = String(text);
+    if (fit < 4) return null;
+    if (s.length <= fit) return [s];
+    var cut = function (t) { return t.length <= fit ? t : t.slice(0, fit - 1).trimEnd() + "…"; };
+    var best = -1;
+    for (var i = 0; i < s.length; i++) {
+      if (s[i] === " " && (best < 0 || Math.abs(s.length / 2 - i) < Math.abs(s.length / 2 - best))) best = i;
+    }
+    if (best < 0) return [cut(s)];
+    return [cut(s.slice(0, best)), cut(s.slice(best + 1))];
+  }
+  function legend(el, items) {
+    var box = document.createElement("div");
+    box.className = "chart-legend";
+    items.forEach(function (it) {
+      var row = document.createElement("span");
+      var dot = document.createElement("i");
+      dot.style.background = it.color;
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode((it.label || "") + (it.value ? " " : "")));
+      if (it.value) {
+        var v = document.createElement("b");
+        v.textContent = it.value;
+        row.appendChild(v);
+      }
+      box.appendChild(row);
+    });
+    resolve(el).appendChild(box);
+  }
+  var seriesPalette = ["#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4", "#0ea5b7"];
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  // A page's function may return nothing or throw: the chart prints its
+  // number instead of taking the rest of the page script down with it.
+  function coerceFormat(spec) {
+    if (typeof spec === "function") {
+      return function (v) {
+        try {
+          var out = spec(v);
+          return out == null ? "" : String(out);
+        } catch (e) {
+          return fmt.num(v);
+        }
+      };
+    }
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el = resolve(el);
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  // finite reads a chart value as a number, 0 when it is not one (NaN,
+  // Infinity, a stray string), so one bad value cannot blank the axis.
+  function finite(v) {
+    var n = +v;
+    return isFinite(n) ? n : 0;
+  }
+
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values.map(finite)) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // labelsFor pads or trims the category names to the n points drawn: pages
+  // pass labels and values of different lengths, and one throw here loses
+  // every section the page renders after the chart.
+  function labelsFor(cfg, n) {
+    var out = [];
+    for (var i = 0; i < n; i++) out.push(cfg.labels && cfg.labels[i] != null ? String(cfg.labels[i]) : "");
+    return out;
+  }
+
+  // niceMax rounds the scale up so the four grid steps land on round values
+  // (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 × 10^k) and the tick labels read exactly.
+  function niceMax(max) {
+    var raw = max / 4;
+    var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    var res = raw / mag;
+    var steps = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    var nice = steps.filter(function (s) { return s >= res - 1e-9; })[0];
+    return nice * mag * 4;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 12;
+    var max = niceMax(maxOf(cfg.values));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = cfg.values.length;
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var names = labels.map(function (l) { return categoryLines(l, step); });
+    var named = names.every(Boolean);
+    if (named && names.some(function (l) { return l.length > 1; })) padB = 42;
+    var plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    var every = xLabelStep(labels, step);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (finite(v) / max) * plotH);
+      var x = axis.padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: (cfg.colors && cfg.colors[i]) || color });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      if (named) {
+        names[i].forEach(function (text, li) {
+          drawXLabel(svg, text, x + bw / 2, padT + plotH + 18 + li * 13, W, false);
+        });
+      } else if ((n - 1 - i) % every === 0) {
+        drawXLabel(svg, labels[i], x + bw / 2, H - 10, W, false);
+      }
+    });
+  }
+
+  // line(el, {labels:[], values:[] | series:[{label, values, color?}], color?, format?})
+  // — one line, or several series on one scale with a legend under the chart.
+  function line(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 16;
+    var series = cfg.series && cfg.series.length
+      ? cfg.series
+      : [{ label: "", values: cfg.values || [], color: cfg.color }];
+    var all = [];
+    series.forEach(function (s) { all = all.concat(s.values || []); });
+    var max = niceMax(maxOf(all));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = series.reduce(function (m, s) { return Math.max(m, (s.values || []).length); }, 0);
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR, plotH = H - padT - padB;
+    var f = coerceFormat(cfg.format);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    var xs = labels.map(function (_, i) { return axis.padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1)); });
+    var every = xLabelStep(labels, n > 1 ? plotW / (n - 1) : plotW);
+    labels.forEach(function (label, i) {
+      if ((n - 1 - i) % every === 0) drawXLabel(svg, label, xs[i], H - 10, W, true);
+    });
+    var colors = series.map(function (s, si) {
+      return s.color || (si === 0 ? (cfg.color || accent()) : seriesPalette[(si - 1) % seriesPalette.length]);
+    });
+    series.forEach(function (s, si) {
+      var color = colors[si];
+      var pts = (s.values || []).map(function (v, i) { return [xs[i], padT + plotH - (finite(v) / max) * plotH]; });
+      var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+      svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+      pts.forEach(function (p, i) {
+        var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+        var t = svgEl("title", {});
+        t.textContent = (s.label ? s.label + " · " : "") + labels[i] + ": " + f(s.values[i]);
+        c.appendChild(t);
+        svg.appendChild(c);
+      });
+    });
+    if (series.length > 1) {
+      legend(el, series.map(function (s, si) { return { label: s.label, color: colors[si] }; }));
+    }
+  }
+
+  // donut(el, {labels:[], values:[], colors?, format?, center?, centerLabel?, legend?})
+  // — donut with a short total in the centre (compact, in the declared unit)
+  // and, with legend: true, the labels and shares listed under it.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    // At 100% of a wide container the donut outgrows the height pages give
+    // the box and spills over the next section: keep it at its own size.
+    svg.style.maxWidth = W + "px";
+    svg.style.margin = "0 auto";
+    var values = cfg.values.map(finite);
+    var labels = labelsFor(cfg, values.length);
+    var sum = values.reduce(function (a, b) { return a + b; }, 0);
+    var total = sum || 1;
+    var palette = cfg.colors || [accent()].concat(seriesPalette);
+    // The hover keeps the full value; the centre has room for a short one.
+    var full = coerceFormat(cfg.format);
+    var short = typeof cfg.format === "function" ? full : cfg.format === "brl" ? fmt.brlCompact : fmt.compact;
+    var a0 = -Math.PI / 2;
+    values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + full(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    // A share chart has no total worth printing: without its own centre text
+    // the caption alone takes the middle.
+    var text = cfg.center != null ? String(cfg.center) : (cfg.format === "pct" ? "" : short(sum));
+    if (text) {
+      var size = text.length > 9 ? 14 : text.length > 7 ? 17 : 20;
+      var center = svgEl("text", { x: cx, y: cfg.centerLabel ? cy + 1 : cy + 6, "text-anchor": "middle", "font-size": size, "font-weight": 650, fill: "currentColor" });
+      center.textContent = text;
+      svg.appendChild(center);
+    }
+    if (cfg.centerLabel) {
+      var cap = svgEl("text", { x: cx, y: text ? cy + 19 : cy + 5, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      cap.textContent = cfg.centerLabel;
+      svg.appendChild(cap);
+    }
+    if (cfg.legend) {
+      legend(el, labels.map(function (label, i) {
+        return { label: label, color: palette[i % palette.length], value: fmt.pct(values[i] / total) };
+      }));
+    }
+  }
+
+  // ---- Page building blocks: what dashboards and small systems kept
+  // re-implementing — a searchable sortable table, a KPI row, tabs, toasts,
+  // dialogs, saved state and mock data. Every call is opt-in, so a page that
+  // brings its own versions keeps them.
+
+  function resolve(target) {
+    return typeof target === "string" ? document.querySelector(target) : target;
+  }
+
+  function node(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function isNumberColumn(col) {
+    return col.align === "right" || col.format === "num" || col.format === "brl" || col.format === "pct";
+  }
+
+  function cellText(col, row) {
+    var value = row[col.key];
+    if (value == null) return "";
+    return col.format ? coerceFormat(col.format)(value) : String(value);
+  }
+
+  function compareValues(a, b) {
+    if (typeof a === "number" && typeof b === "number") return a - b;
+    return String(a == null ? "" : a).localeCompare(String(b == null ? "" : b), "pt-BR", { numeric: true });
+  }
+
+  // table(el, {columns, rows, search?, pageSize?, empty?, onRowClick?}) — a
+  // table.shell-table with sortable headers, an optional search box and
+  // pager. A column is {key, label, format?, align?, sortable? (true),
+  // render?(value, row) returning a Node or an HTML string — the page writes
+  // its cell templates as markup}. Plain values are always set as text.
+  // Returns {setRows, rows}.
+  function table(target, cfg) {
+    var root = resolve(target);
+    var cols = cfg.columns || [];
+    var pageSize = cfg.pageSize || 0;
+    var state = { rows: (cfg.rows || []).slice(), query: "", key: null, dir: 1, page: 0 };
+    root.innerHTML = "";
+    if (cfg.search) {
+      var search = node("input", "input skip-table-search");
+      search.type = "search";
+      search.placeholder = typeof cfg.search === "string" ? cfg.search : "Buscar…";
+      search.setAttribute("aria-label", search.placeholder);
+      search.addEventListener("input", function () {
+        state.query = search.value.trim().toLowerCase();
+        state.page = 0;
+        draw();
+      });
+      root.appendChild(search);
+    }
+    var tableEl = node("table", "shell-table");
+    var headRow = node("tr");
+    var heads = cols.map(function (col) {
+      var th = node("th", isNumberColumn(col) ? "num" : "", col.label == null ? col.key : col.label);
+      th.scope = "col";
+      if (col.sortable !== false) {
+        var toggle = function () {
+          state.dir = state.key === col.key ? -state.dir : 1;
+          state.key = col.key;
+          draw();
+        };
+        th.setAttribute("data-sort", col.key);
+        th.tabIndex = 0;
+        th.addEventListener("click", toggle);
+        th.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+      }
+      headRow.appendChild(th);
+      return th;
+    });
+    var thead = node("thead");
+    var tbody = node("tbody");
+    var wrap = node("div", "skip-table-wrap");
+    var pager = node("div", "skip-pager");
+    thead.appendChild(headRow);
+    tableEl.appendChild(thead);
+    tableEl.appendChild(tbody);
+    wrap.appendChild(tableEl);
+    root.appendChild(wrap);
+    if (pageSize) root.appendChild(pager);
+
+    function visibleRows() {
+      var rows = state.rows;
+      if (state.query) {
+        rows = rows.filter(function (row) {
+          return cols.some(function (col) { return cellText(col, row).toLowerCase().indexOf(state.query) >= 0; });
+        });
+      }
+      if (state.key) {
+        var key = state.key, dir = state.dir;
+        rows = rows.slice().sort(function (a, b) { return dir * compareValues(a[key], b[key]); });
+      }
+      return rows;
+    }
+
+    function drawRow(row) {
+      var tr = node("tr");
+      cols.forEach(function (col) {
+        var td = node("td", isNumberColumn(col) ? "num" : "");
+        if (!col.render) {
+          td.textContent = cellText(col, row);
+        } else {
+          var content = col.render(row[col.key], row);
+          if (content instanceof Node) td.appendChild(content);
+          else td.innerHTML = content == null ? "" : String(content);
+        }
+        tr.appendChild(td);
+      });
+      // The row stays a row (no role) and takes focus, so a keyboard reaches
+      // the same action; keys pressed on a control inside a cell are its own.
+      if (cfg.onRowClick) {
+        tr.style.cursor = "pointer";
+        tr.tabIndex = 0;
+        tr.addEventListener("click", function () { cfg.onRowClick(row); });
+        tr.addEventListener("keydown", function (e) {
+          if (e.target !== tr || (e.key !== "Enter" && e.key !== " ")) return;
+          e.preventDefault();
+          cfg.onRowClick(row);
+        });
+      }
+      return tr;
+    }
+
+    function pagerButton(label, disabled, step) {
+      var button = node("button", "btn", label);
+      button.type = "button";
+      button.setAttribute("data-variant", "outline");
+      button.setAttribute("data-size", "sm");
+      button.disabled = disabled;
+      button.addEventListener("click", function () { state.page += step; draw(); });
+      return button;
+    }
+
+    function draw() {
+      var rows = visibleRows();
+      heads.forEach(function (th, i) {
+        if (cols[i].key === state.key) th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      var pages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+      state.page = Math.min(state.page, pages - 1);
+      var shown = pageSize ? rows.slice(state.page * pageSize, (state.page + 1) * pageSize) : rows;
+      tbody.innerHTML = "";
+      if (!shown.length) {
+        var empty = node("td", "skip-table-empty", cfg.empty || "Nenhum registro encontrado.");
+        empty.colSpan = cols.length;
+        tbody.appendChild(node("tr")).appendChild(empty);
+      }
+      shown.forEach(function (row) { tbody.appendChild(drawRow(row)); });
+      if (!pageSize) return;
+      pager.innerHTML = "";
+      var from = rows.length ? state.page * pageSize + 1 : 0;
+      pager.appendChild(node("span", "", from + "–" + Math.min(rows.length, (state.page + 1) * pageSize) + " de " + rows.length));
+      var nav = node("div", "row gap-2");
+      nav.appendChild(pagerButton("Anterior", state.page === 0, -1));
+      nav.appendChild(pagerButton("Próxima", state.page >= pages - 1, 1));
+      pager.appendChild(nav);
+    }
+
+    draw();
+    return {
+      setRows: function (rows) { state.rows = rows.slice(); draw(); },
+      rows: visibleRows
+    };
+  }
+
+  // kpis(el, [{label, value, format?, delta?, hint?}]) — KPI cards in a
+  // responsive grid; delta is a fraction (0.12 renders as ▲ 12%).
+  function kpis(target, items) {
+    var root = resolve(target);
+    root.innerHTML = "";
+    root.classList.add("shell-grid");
+    items.forEach(function (item) {
+      var card = node("div", "panel kpi");
+      card.appendChild(node("span", "kpi-label", item.label));
+      // Large money values go compact ("R$ 27,5 mi"): the full amount does
+      // not fit a KPI card at four per row.
+      var kpiFormat = item.format === "brl" && Math.abs(item.value) >= 1e6 ? fmt.brlCompact : (item.format ? coerceFormat(item.format) : null);
+      card.appendChild(node("span", "kpi-value", kpiFormat ? kpiFormat(item.value) : String(item.value)));
+      if (typeof item.delta === "number") {
+        var up = item.delta >= 0;
+        card.appendChild(node("span", "kpi-delta " + (up ? "up" : "down"), (up ? "▲ " : "▼ ") + fmt.pct(Math.abs(item.delta))));
+      }
+      if (item.hint) card.appendChild(node("span", "kpi-label", item.hint));
+      root.appendChild(card);
+    });
+  }
+
+  // badge(text, variant?) — a .badge node for table cells and lists;
+  // variant is "secondary" | "outline" | "destructive" (default: primary).
+  function badge(text, variant) {
+    var el = node("span", "badge", text);
+    if (variant) el.setAttribute("data-variant", variant);
+    return el;
+  }
+
+  // tabs(el) — wires one .tabs block: [role=tab] buttons inside
+  // [role=tablist], each with aria-controls naming its [role=tabpanel].
+  function tabs(target) {
+    var root = resolve(target);
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(chosen) {
+      buttons.forEach(function (b) {
+        var on = b === chosen;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(b.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+      });
+    });
+    select(buttons.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || buttons[0]);
+  }
+
+  // toast(message, {type?: "success" | "error", title?, duration?}) — a
+  // .toast in a shared .toaster at the bottom of the page.
+  function toast(message, opts) {
+    opts = opts || {};
+    var toaster = document.querySelector(".toaster") || document.body.appendChild(node("div", "toaster"));
+    var item = node("div", "toast");
+    item.setAttribute("role", opts.type === "error" ? "alert" : "status");
+    item.setAttribute("aria-hidden", "true");
+    if (opts.type) item.setAttribute("data-type", opts.type);
+    var content = node("div", "toast-content");
+    var section = node("section");
+    if (opts.title) section.appendChild(node("h2", "", opts.title));
+    section.appendChild(node("p", "", message));
+    content.appendChild(section);
+    item.appendChild(content);
+    toaster.appendChild(item);
+    requestAnimationFrame(function () { item.setAttribute("aria-hidden", "false"); });
+    setTimeout(function () {
+      item.setAttribute("aria-hidden", "true");
+      setTimeout(function () { item.remove(); }, 400);
+    }, opts.duration || 3000);
+  }
+
+  // Dialogs are native <dialog class="dialog">: a [data-dialog-open="id"]
+  // anywhere opens one, a [data-dialog-close] inside closes it, and a click on
+  // its backdrop closes it too. Plain dialog.showModal()/close() still work.
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!(target instanceof Element)) return;
+    var opener = target.closest("[data-dialog-open]");
+    if (opener) {
+      var dialog = document.getElementById(opener.getAttribute("data-dialog-open"));
+      if (dialog && dialog.showModal && !dialog.open) dialog.showModal();
+      return;
+    }
+    var closer = target.closest("[data-dialog-close]");
+    if (closer && closer.closest("dialog")) {
+      closer.closest("dialog").close();
+      return;
+    }
+    if (target.tagName === "DIALOG" && target.classList.contains("dialog") && target.open) target.close();
+  });
+
+  // store(key, fallback) — JSON state in localStorage that never throws (a
+  // private window or a full quota falls back to memory): {get, set, update}.
+  function store(key, fallback) {
+    var memory;
+    // Set while the last write did not reach localStorage: what is stored
+    // there is older than memory until a write goes through again.
+    var unsaved = false;
+    var initial = function () { return fallback === undefined ? undefined : JSON.parse(JSON.stringify(fallback)); };
+    function get() {
+      if (!unsaved) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (raw != null) return JSON.parse(raw);
+        } catch (e) { /* storage unavailable: memory below */ }
+      }
+      return memory !== undefined ? memory : initial();
+    }
+    function set(value) {
+      memory = value;
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        unsaved = false;
+      } catch (e) {
+        unsaved = true;
+      }
+      return value;
+    }
+    return { get: get, set: set, update: function (fn) { return set(fn(get())); } };
+  }
+
+  // mock — seeded random data, so a page asks for 90 days of numbers in one
+  // line instead of writing them out; the same seed gives the same data.
+  var FIRST = ["Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+    "Larissa", "Marcos", "Natália", "Otávio", "Paula", "Rafael", "Sofia", "Thiago", "Vanessa", "Lucas"];
+  var LAST = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima",
+    "Araújo", "Fernandes", "Carvalho", "Gomes", "Martins", "Rocha", "Ribeiro", "Barbosa"];
+  var INITIALS = "ABCDEFGHIJLMNOPRSTV".split("");
+  var CITIES = ["São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", "Curitiba, PR", "Porto Alegre, RS",
+    "Salvador, BA", "Recife, PE", "Fortaleza, CE", "Brasília, DF", "Goiânia, GO", "Campinas, SP", "Florianópolis, SC",
+    "Manaus, AM", "Belém, PA", "Vitória, ES", "Natal, RN"];
+
+  function createMock(seed) {
+    var state = seed >>> 0;
+    var names = 0;
+    function random() {
+      state = (state + 0x6d2b79f5) >>> 0;
+      var t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function int(min, max) { return min + Math.floor(random() * (max - min + 1)); }
+    function pick(list) { return list[Math.floor(random() * list.length)]; }
+    var mock = {
+      seed: function (value) { state = value >>> 0; names = 0; return mock; },
+      random: random,
+      int: int,
+      float: function (min, max, decimals) {
+        var factor = Math.pow(10, decimals == null ? 2 : decimals);
+        return Math.round((min + random() * (max - min)) * factor) / factor;
+      },
+      pick: pick,
+      chance: function (p) { return random() < p; },
+      // There are 360 first/last pairs. A page that draws until the name is
+      // new (do { … } while (used.has(name))) froze the tab past them, so
+      // later draws widen the space: a second surname after 200 (6,480), a
+      // middle initial after 4,000.
+      name: function () {
+        names++;
+        var middle = names > 4000 ? pick(INITIALS) + ". " : "";
+        return pick(FIRST) + " " + middle + (names > 200 ? pick(LAST) + " " : "") + pick(LAST);
+      },
+      city: function () { return pick(CITIES); },
+      // series(n, {start, trend, noise, min, decimals}) — a walk: each value
+      // moves by trend (fraction per step) plus up to ±noise of itself.
+      series: function (n, opts) {
+        opts = opts || {};
+        var value = opts.start == null ? 100 : opts.start;
+        var factor = Math.pow(10, opts.decimals || 0);
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          out.push(Math.max(opts.min == null ? 0 : opts.min, Math.round(value * factor) / factor));
+          value = value * (1 + (opts.trend || 0)) * (1 + (random() * 2 - 1) * (opts.noise == null ? 0.08 : opts.noise));
+        }
+        return out;
+      },
+      // dates(n, {end?, step?: "day" | "week" | "month"}) — ISO dates
+      // (YYYY-MM-DD), oldest first, ending at end (default: today).
+      dates: function (n, opts) {
+        opts = opts || {};
+        var end = opts.end ? new Date(opts.end) : new Date();
+        var out = [];
+        for (var i = n - 1; i >= 0; i--) {
+          var d = new Date(end.getTime());
+          if (opts.step === "month") d.setMonth(d.getMonth() - i);
+          else d.setDate(d.getDate() - i * (opts.step === "week" ? 7 : 1));
+          out.push(d.toISOString().slice(0, 10));
+        }
+        return out;
+      },
+      // rows(n, spec) — n objects; each spec value is a function(i), a list
+      // to pick from, or a constant.
+      rows: function (n, spec) {
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          var row = {};
+          for (var key in spec) {
+            var value = spec[key];
+            row[key] = typeof value === "function" ? value(i) : Array.isArray(value) ? pick(value) : value;
+          }
+          out.push(row);
+        }
+        return out;
+      }
+    };
+    return mock;
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+  window.skipUI = { table: table, kpis: kpis, badge: badge, tabs: tabs, toast: toast };
+  window.skipStore = store;
+  window.skipMock = createMock(20261022);
+})();
+
+</script>
+<style>
+:root {
+--accent: #3b82f6;
+--accent-text: #60a5fa;
+--accent-contrast: #05070d;
+--bg: #05070d;
+--surface: #0b1020;
+--text: #e6edf9;
+--text-muted: #9aa8c4;
+--border: rgba(59, 130, 246, 0.28);
+--danger: #f87171;
+--success: #34d399;
+--font-display: 'Space Grotesk', system-ui, sans-serif;
+--font-body: 'Inter', system-ui, -apple-system, sans-serif;
+--cut: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+html, body { background: #05070d; color: var(--text); }
+body { font-family: var(--font-body); min-height: 100vh; }
+h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.01em; }
+.app-header {
+position: sticky; top: 0; z-index: 30;
+background: rgba(5, 7, 13, 0.92); backdrop-filter: blur(10px);
+border-bottom: 1px solid var(--border);
+}
+.progress-track { height: 4px; background: #111a33; width: 100%; }
+.progress-fill { height: 100%; width: 20%; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 12px rgba(59,130,246,0.6); transition: width .4s ease; }
+.step-dots { display: flex; gap: 8px; flex-wrap: wrap; }
+.step-dot {
+display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text-muted);
+background: transparent; cursor: pointer; transition: all .2s;
+}
+.step-dot.active { color: var(--accent-contrast); background: var(--accent-text); border-color: var(--accent-text); font-weight: 600; }
+.step-dot.done { color: var(--accent-text); border-color: rgba(96,165,250,.6); }
+.step-dot:disabled { opacity: .5; cursor: not-allowed; }
+.card-cut {
+background: var(--surface); border: 1px solid var(--border);
+clip-path: var(--cut); padding: 24px; position: relative;
+}
+.card-cut.card-dark { background: #080c18; }
+.eyebrow-pill {
+display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 600;
+letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text);
+border: 1px solid rgba(96,165,250,.45); background: rgba(59,130,246,.12); border-radius: 999px;
+}
+.field-label { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 6px; display: block; }
+.helper { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.field-error { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+.field.has-error .input { border-color: var(--danger) !important; }
+.field.has-error .field-error { display: block; }
+.input, select.input, textarea.input {
+background: #070b16 !important; color: var(--text) !important; border-color: var(--border) !important;
+}
+.input::placeholder, textarea::placeholder { color: #6b7896; }
+.input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent-text); outline-offset: 1px; }
+.yn-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--border); background: #070b16; margin-bottom: 10px; clip-path: polygon(10px 0,100% 0,100% 100%,0 100%,0 10px); }
+.yn-row.is-yes { border-color: #f87171; background: rgba(248,113,113,.08); }
+.yn-group { display: inline-flex; gap: 6px; }
+.yn-btn { padding: 6px 14px; font-size: 13px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; font-weight: 600; }
+.yn-btn.on-no { background: #34d399; color: #05070d; border-color: #34d399; }
+.yn-btn.on-yes { background: #f87171; color: #05070d; border-color: #f87171; }
+.check-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.check-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); background: #070b16; cursor: pointer; font-size: 14px; }
+.check-item input { accent-color: #3b82f6; width: 16px; height: 16px; }
+.check-item.checked { border-color: var(--accent-text); background: rgba(59,130,246,.1); }
+.radio-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid var(--border); background: #070b16; cursor: pointer; font-size: 14px; }
+.radio-pill input { accent-color: #3b82f6; }
+.radio-pill.checked { border-color: var(--accent-text); background: rgba(59,130,246,.12); }
+.radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.warn-box { border: 1px solid #f87171; background: rgba(248,113,113,.08); padding: 14px 16px; clip-path: polygon(12px 0,100% 0,100% 100%,0 100%,0 12px); font-size: 14px; }
+.imc-card { border: 1px solid var(--accent-text); background: linear-gradient(135deg, rgba(59,130,246,.22), rgba(5,7,13,.6)); padding: 20px; clip-path: var(--cut); }
+.imc-value { font-family: var(--font-display); font-size: 44px; font-weight: 700; color: var(--accent-text); line-height: 1; }
+.btn-glow { box-shadow: 0 0 0 1px rgba(96,165,250,.6), 0 0 22px rgba(59,130,246,.55); }
+.btn-glow:hover { box-shadow: 0 0 0 1px #60a5fa, 0 0 34px rgba(59,130,246,.8); }
+.summary-card { border: 1px solid var(--border); background: #070b16; padding: 16px; clip-path: polygon(10px 0,100% 0,100% 100%,0 100%,0 10px); }
+.summary-card h3 { font-size: 15px; color: var(--accent-text); margin-bottom: 8px; }
+.summary-card dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 13px; }
+.summary-card dt { color: var(--text-muted); }
+.summary-card dd { margin: 0; color: var(--text); }
+.step { display: none; }
+.step.active { display: block; animation: fadeUp .35s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.wizard-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 640px) {
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (min-width: 900px) {
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+.imc-row { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 720px) { .imc-row { grid-template-columns: 1fr 1fr; } }
+.scale-bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-top: 12px; font-size: 11px; color: var(--text-muted); text-align: center; }
+.scale-bar span { padding: 4px 0; border-top: 3px solid #1f2b4d; }
+.scale-bar span.on { border-top-color: var(--accent-text); color: var(--accent-text); font-weight: 600; }
+.stat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.final-box { text-align: center; padding: 36px 24px; }
+.check-consent { display: flex; gap: 12px; align-items: flex-start; padding: 16px; border: 1px solid var(--border); background: #070b16; cursor: pointer; font-size: 14px; }
+.check-consent input { accent-color: #3b82f6; width: 18px; height: 18px; margin-top: 2px; }
+.check-consent.invalid { border-color: var(--danger); }
+.sec-title { font-size: 22px; margin: 0; }
+.sec-sub { color: var(--text-muted); font-size: 14px; margin: 6px 0 0; }
+.footer-note { color: var(--text-muted); font-size: 12px; text-align: center; padding: 24px 0 40px; }
+.hidden { display: none !important; }
+@media print {
+.app-header, .wizard-nav, .no-print { display: none !important; }
+body, html { background: #fff; color: #000; }
+.card-cut { clip-path: none; border: 1px solid #ccc; background: #fff; }
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+<div class="shell-container" style="padding-top:14px;padding-bottom:0;">
+<div class="row between" style="align-items:center;gap:12px;flex-wrap:wrap;">
+<div>
+<span class="eyebrow-pill">Anamnese · Consultoria Online</span>
+<h1 class="font-display" style="font-size:22px;margin:8px 0 0;">Treinador Araújo</h1>
+<p class="sec-sub" style="margin-top:2px;font-size:13px;">Anamnese · Consultoria Online</p>
+</div>
+<div class="row gap-2 no-print">
+
+<button class="btn" data-variant="ghost" data-size="sm" id="btnReset" type="button">Limpar tudo</button>
+</div>
+</div>
+<div style="margin-top:14px;">
+<div class="row between" style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">
+<span id="progressLabel">Etapa 1 de 4</span>
+<span id="progressPct">20%</span>
+</div>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+<div class="step-dots" id="stepDots" style="margin:12px 0 14px;"></div>
+</div>
+</div>
+</header>
+
+<main class="shell-container" style="padding-top:24px;padding-bottom:24px;max-width:960px;">
+<div class="row between no-print" style="margin-bottom:16px;font-size:13px;color:var(--text-muted);gap:8px;flex-wrap:wrap;">
+<span>Suas respostas são salvas automaticamente neste navegador.</span>
+<span class="shell-badge" id="saveBadge">Rascunho salvo</span>
+</div>
+
+<!-- ETAPA 1 -->
+<section class="step active" data-step="1">
+<div class="card-cut">
+<h2 class="sec-title font-display">Etapa 1 · Dados pessoais</h2>
+<p class="sec-sub">Informações básicas para identificar seu cadastro e calcular seu IMC.</p>
+<div class="grid-2" style="margin-top:20px;">
+<div class="field" data-field="nome">
+<label class="field-label" for="nome">Nome completo *</label>
+<input class="input" id="nome" type="text" placeholder="Ex.: Mariana Souza Lima" autocomplete="name">
+<div class="helper">Use o nome que aparece no seu documento.</div>
+<div class="field-error">Informe seu nome completo.</div>
+</div>
+<div class="field">
+<label class="field-label" for="idade">Idade</label>
+<input class="input" id="idade" type="number" min="10" max="99" placeholder="Ex.: 32">
+</div>
+<div class="field">
+<span class="field-label">Sexo</span>
+<div class="radio-group" id="sexoGroup">
+<label class="radio-pill"><input type="radio" name="sexo" value="masculino"> Masculino</label>
+<label class="radio-pill"><input type="radio" name="sexo" value="feminino"> Feminino</label>
+</div>
+</div>
+<div class="field" data-field="telefone">
+<label class="field-label" for="telefone">Telefone / WhatsApp *</label>
+<input class="input" id="telefone" type="tel" placeholder="(61) 99999-9999" inputmode="tel">
+<div class="helper">Enviaremos o seu plano por aqui.</div>
+<div class="field-error">Informe um WhatsApp válido com DDD.</div>
+</div>
+<div class="field">
+<label class="field-label" for="cidade">Cidade</label>
+<input class="input" id="cidade" type="text" placeholder="Ex.: Brasília - DF">
+</div>
+<div class="field" data-field="altura">
+<label class="field-label" for="altura">Altura (cm) *</label>
+<input class="input" id="altura" type="number" min="100" max="230" placeholder="Ex.: 172">
+<div class="helper">Somente números, em centímetros.</div>
+<div class="field-error">Informe uma altura entre 100 e 230 cm.</div>
+</div>
+<div class="field" data-field="peso">
+<label class="field-label" for="peso">Peso (kg) *</label>
+<input class="input" id="peso" type="number" min="30" max="300" step="0.1" placeholder="Ex.: 78.5">
+<div class="helper">Pese-se pela manhã, em jejum, se possível.</div>
+<div class="field-error">Informe um peso entre 30 e 300 kg.</div>
+</div>
+</div>
+</div>
+
+<div class="imc-card" style="margin-top:20px;">
+<div class="imc-row">
+<div>
+<span class="eyebrow-pill">IMC calculado</span>
+<div class="imc-value" id="imcValue" style="margin-top:12px;">--</div>
+<p class="sec-sub" id="imcCaption">Preencha altura e peso para ver seu índice de massa corporal.</p>
+</div>
+<div>
+<div style="font-size:14px;font-weight:600;" id="imcClass">Aguardando dados</div>
+<div class="scale-bar" id="imcScale">
+<span data-k="baixo">Baixo</span>
+<span data-k="eutrofico">Eutrófico</span>
+<span data-k="sobrepeso">Sobrepeso</span>
+<span data-k="ob1">Obes. I</span>
+<span data-k="ob2">Obes. II</span>
+<span data-k="ob3">Obes. III</span>
+</div>
+<p class="helper" style="margin-top:10px;">IMC = peso ÷ altura² (em metros). Referência da OMS para adultos.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ETAPA 2 -->
+<section class="step" data-step="2">
+<div class="card-cut">
+<h2 class="sec-title font-display">Etapa 2 · Saúde e liberação médica</h2>
+<p class="sec-sub">Perguntas de triagem no padrão PAR-Q+. Responda com sinceridade: a segurança do seu treino depende disso.</p>
+
+<div style="margin-top:20px;" id="parqList">
+<div class="yn-row" data-yn="cardio">
+<div><strong>Você tem algum problema cardíaco diagnosticado?</strong><div class="helper">Ex.: arritmia, insuficiência, cardiopatia.</div></div>
+<div class="yn-group"><button type="button" class="yn-btn" data-val="nao">Não</button><button type="button" class="yn-btn" data-val="sim">Sim</button></div>
+</div>
+<div class="yn-row" data-yn="peito">
+<div><strong>Sente dor no peito ao se esforçar ou em repouso?</strong><div class="helper">Dor, aperto ou pressão no tórax.</div></div>
+<div class="yn-group"><button type="button" class="yn-btn" data-val="nao">Não</button><button type="button" class="yn-btn" data-val="sim">Sim</button></div>
+</div>
+<div class="yn-row" data-yn="tontura">
+<div><strong>Perde o equilíbrio por tontura ou já desmaiou?</strong><div class="helper">Inclui episódios recentes de mal-estar intenso.</div></div>
+<div class="yn-group"><button type="button" class="yn-btn" data-val="nao">Não</button><button type="button" class="yn-btn" data-val="sim">Sim</button></div>
+</div>
+<div class="yn-row" data-yn="osseo">
+<div><strong>Tem problema ósseo ou articular que piora com atividade física?</strong><div class="helper">Ex.: joelho, ombro, coluna, quadril.</div></div>
+<div class="yn-group"><button type="button" class="yn-btn" data-val="nao">Não</button><button type="button" class="yn-btn" data-val="sim">Sim</button></div>
+</div>
+<div class="yn-row" data-yn="medic">
+<div><strong>Usa medicamento para pressão ou para o coração?</strong><div class="helper">Inclui anti-hipertensivos e antiarrítmicos.</div></div>
+<div class="yn-group"><button type="button" class="yn-btn" data-val="nao">Não</button><button type="button" class="yn-btn" data-val="sim">Sim</button></div>
+</div>
+<div class="yn-row" data-yn="outro">
+<div><strong>Existe outro motivo de saúde que impeça a prática de exercícios?</strong><div class="helper">Qualquer restrição informada pelo seu médico.</div></div>
+<div class="yn-group"><button type="button" class="yn-btn" data-val="nao">Não</button><button type="button" class="yn-btn" data-val="sim">Sim</button></div>
+</div>
+</div>
+
+<div class="field" id="parqDetailWrap" style="margin-top:16px;">
+<label class="field-label" for="parqDetail">Detalhe cada resposta "sim"</label>
+<textarea class="input" id="parqDetail" rows="3" placeholder="Ex.: Hipertensão controlada com losartana 50 mg, em tratamento desde 2022."></textarea>
+<div class="helper">Obrigatório quando marcar qualquer "sim" acima.</div>
+<div class="field-error" id="parqDetailErr">Descreva ao menos brevemente as respostas "sim".</div>
+</div>
+
+<div class="warn-box" style="margin-top:18px;">
+<strong style="color:#fca5a5;">Aviso importante:</strong> Este formulário não substitui avaliação médica. Em caso de condição de saúde, consulte um médico antes de iniciar.
+</div>
+
+<div style="margin-top:24px;">
+<h3 class="font-display" style="font-size:17px;margin-bottom:4px;">Condições</h3>
+<p class="helper" style="margin-bottom:10px;">Marque tudo que se aplica a você.</p>
+<div class="check-grid" id="condGroup">
+<label class="check-item"><input type="checkbox" value="hipertensao"> Hipertensão</label>
+<label class="check-item"><input type="checkbox" value="diabetes"> Diabetes</label>
+<label class="check-item"><input type="checkbox" value="lesao"> Lesão articular</label>
+<label class="check-item"><input type="checkbox" value="cirurgia"> Cirurgia recente</label>
+<label class="check-item"><input type="checkbox" value="nenhuma"> Nenhuma</label>
+</div>
+</div>
+
+<div class="field" style="margin-top:24px;">
+<label class="field-label" for="medicamentos">Medicamentos em uso</label>
+<textarea class="input" id="medicamentos" rows="3" placeholder="Ex.: Losartana 50 mg. Escreva "nenhum" se não usa."></textarea>
+</div>
+</section>
+
+<!-- ETAPA 3 -->
+<section class="step" data-step="3">
+<div class="card-cut">
+<h2 class="sec-title font-display">Etapa 3 · Objetivo e histórico de treino</h2>
+<p class="sec-sub">Conte onde você quer chegar e o que já fez até aqui para montarmos um plano realista.</p>
+<div style="margin-top:20px;">
+<span class="field-label" data-field="objetivo">Objetivo principal *</span>
+<div class="radio-group" id="objetivoGroup">
+<label class="radio-pill"><input type="radio" name="objetivo" value="emagrecimento"> Emagrecimento</label>
+<label class="radio-pill"><input type="radio" name="objetivo" value="hipertrofia"> Hipertrofia</label>
+<label class="radio-pill"><input type="radio" name="objetivo" value="forca"> Ganho de força</label>
+<label class="radio-pill"><input type="radio" name="objetivo" value="condicionamento"> Condicionamento</label>
+<label class="radio-pill"><input type="radio" name="objetivo" value="saude"> Saúde geral</label>
+<label class="radio-pill"><input type="radio" name="objetivo" value="reabilitacao"> Reabilitação</label>
+<label class="radio-pill"><input type="radio" name="objetivo" value="definicao"> Definição</label>
+</div>
+<div class="field-error" id="objetivoErr" style="display:none;color:var(--danger);font-size:12px;margin-top:6px;">Escolha um objetivo principal.</div>
+</div>
+<div class="grid-2" style="margin-top:20px;">
+<div class="field">
+<span class="field-label">Nível de experiência</span>
+<div class="radio-group" id="nivelGroup">
+<label class="radio-pill"><input type="radio" name="nivel" value="iniciante"> Iniciante</label>
+<label class="radio-pill"><input type="radio" name="nivel" value="intermediario"> Intermediário</label>
+<label class="radio-pill"><input type="radio" name="nivel" value="avancado"> Avançado</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ETAPA 4 -->
+<section class="step" data-step="4">
+<div class="card-cut">
+<h2 class="sec-title font-display">Etapa 4 · Rotina e disponibilidade</h2>
+<p class="sec-sub">Quanto tempo e onde você consegue treinar de verdade. O plano sempre se adapta à sua agenda.</p>
+<div style="margin-top:20px;">
+<span class="field-label" data-field="dias">Dias da semana disponíveis *</span>
+<div class="check-grid" id="diasGroup">
+<label class="check-item"><input type="checkbox" value="seg"> Segunda</label>
+<label class="check-item"><input type="checkbox" value="ter"> Terça</label>
+<label class="check-item"><input type="checkbox" value="qua"> Quarta</label>
+<label class="check-item"><input type="checkbox" value="qui"> Quinta</label>
+<label class="check-item"><input type="checkbox" value="sex"> Sexta</label>
+<label class="check-item"><input type="checkbox" value="sab"> Sábado</label>
+<label class="check-item"><input type="checkbox" value="dom"> Domingo</label>
+</div>
+<div class="field-error" id="diasErr" style="display:none;color:var(--danger);font-size:12px;margin-top:6px;">Selecione ao menos um dia.</div>
+</div>
+<div class="grid-3" style="margin-top:20px;">
+<div class="field">
+<span class="field-label">Tempo por sessão</span>
+<div class="radio-group" id="tempoGroup">
+<label class="radio-pill"><input type="radio" name="tempo" value="30"> 30 min</label>
+<label class="radio-pill"><input type="radio" name="tempo" value="45"> 45 min</label>
+<label class="radio-pill"><input type="radio" name="tempo" value="60"> 60 min</label>
+<label class="radio-pill"><input type="radio" name="tempo" value="90"> 90 min</label>
+</div>
+</div>
+<div class="field">
+<label class="field-label" for="local">Local de treino</label>
+<select class="input" id="local">
+<option value="">Selecione</option>
+<option value="academia-completa">Academia completa</option>
+<option value="academia-basica">Academia básica</option>
+<option value="casa-equip">Casa com equipamentos</option>
+<option value="casa-sem">Casa sem equipamentos</option>
+<option value="ar-livre">Ao ar livre</option>
+</select>
+</div>
+<div class="field">
+<label class="field-label" for="sono">Horas de sono por noite</label>
+<input class="input" id="sono" type="number" min="0" max="16" step="0.5" placeholder="Ex.: 7">
+</div>
+</div>
+<div class="field" style="margin-top:20px;">
+<label class="field-label" for="dificuldade">Maior dificuldade para manter a rotina</label>
+<textarea class="input" id="dificuldade" rows="3" placeholder="Ex.: Chego cansado do trabalho e acabo desistindo"></textarea>
+</div>
+</div>
+</section>
+
+<!-- ETAPA 4 -->
+<section class="step" data-step="4">
+<div class="card-cut">
+<h2 class="sec-title font-display">Etapa 4 · Revisão e envio</h2>
+<p class="sec-sub">Confira o resumo e envie. Você pode voltar a qualquer etapa para corrigir.</p>
+<div class="grid-2" id="summaryGrid" style="margin-top:20px;"></div>
+<div class="check-consent" id="consentWrap" style="margin-top:24px;">
+<input type="checkbox" id="consent">
+<label for="consent">Declaro que as informações são verdadeiras e autorizo o uso dos dados para elaboração do meu plano de treino.</label>
+</div>
+<div class="field-error" id="consentErr" style="display:none;color:var(--danger);font-size:12px;margin-top:6px;">Você precisa aceitar o consentimento para enviar.</div>
+<div class="row" style="justify-content:center;margin-top:24px;">
+<button class="btn btn-glow" type="button" id="btnSubmit" style="padding:14px 32px;font-size:16px;background:#3b82f6;color:#05070d;">Enviar pelo WhatsApp</button>
+</div>
+</div>
+
+<div class="card-cut final-box hidden" id="finalCard" style="margin-top:20px;">
+<span class="eyebrow-pill">Enviado</span>
+<h2 class="font-display" style="font-size:26px;margin:14px 0 8px;">Pronto!</h2>
+<p class="sec-sub" style="font-size:16px;color:var(--text);">Sua anamnese foi aberta no WhatsApp. É só apertar enviar para o Moisés receber.</p>
+<div class="row" style="justify-content:center;margin-top:20px;gap:12px;flex-wrap:wrap;">
+<button class="btn" data-variant="secondary" type="button" id="btnReopen">Abrir novamente</button>
+<button class="btn" data-variant="ghost" type="button" id="btnNewForm">Novo formulário</button>
+</div>
+</div>
+</section>
+
+<div class="wizard-nav no-print" id="wizardNav">
+<button class="btn" data-variant="outline" type="button" id="btnBack">Voltar</button>
+<button class="btn btn-glow" type="button" id="btnNext" style="background:#3b82f6;color:#05070d;">Continuar</button>
+</div>
+
+<div class="footer-note shell-footer">Treinador Araújo · Consultoria Online · Seus dados ficam protegidos no seu navegador.</div>
+</main>
+
+<dialog class="dialog" id="dlgSaved">
+<div>
+<header>
+<h2 class="font-display">Rascunho recuperado</h2>
+<p>Encontramos respostas anteriores salvas neste navegador.</p>
+</header>
+<footer class="row" style="justify-content:flex-end;gap:8px;margin-top:16px;">
+<button class="btn" data-variant="ghost" type="button" id="dlgReset">Começar do zero</button>
+<button class="btn" type="button" data-dialog-close>Continuar preenchendo</button>
+</footer>
+</div>
+</dialog>
+
+<script>
+(function () {
+var STORAGE_KEY = 'anamnese-treinador-araujo-v1';
+var store = window.skipStore(STORAGE_KEY, {});
+var TOTAL = 4;
+var current = 1;
+var parqAnswers = {};
+var saveTimer = null;
+
+var $ = function (sel, root) { return (root || document).querySelector(sel); };
+var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+var STEP_NAMES = ['Dados pessoais', 'Saúde', 'Objetivo e rotina', 'Revisão'];
+var WA_URL = 'https://wa.me/5561993987411?text=';
+
+function buildDots() {
+var wrap = $('#stepDots');
+wrap.innerHTML = '';
+for (var i = 1; i <= TOTAL; i++) {
+var b = document.createElement('button');
+b.type = 'button';
+b.className = 'step-dot';
+b.dataset.step = i;
+b.textContent = i + '. ' + STEP_NAMES[i - 1];
+b.addEventListener('click', function () {
+var target = parseInt(this.dataset.step, 10);
+if (target <= current) goTo(target);
+else if (target === current + 1) { if (validateStep(current)) goTo(target); }
+});
+wrap.appendChild(b);
+}
+}
+
+function updateProgress() {
+var pct = Math.round((current / TOTAL) * 100);
+$('#progressFill').style.width = pct + '%';
+$('#progressPct').textContent = pct + '%';
+$('#progressLabel').textContent = 'Etapa ' + current + ' de ' + TOTAL;
+$$('.step-dot').forEach(function (d) {
+var n = parseInt(d.dataset.step, 10);
+d.classList.toggle('active', n === current);
+d.classList.toggle('done', n < current);
+});
+}
+
+function goTo(n) {
+current = n;
+$$('.step').forEach(function (s) {
+s.classList.toggle('active', parseInt(s.dataset.step, 10) === n);
+});
+$('#btnBack').style.visibility = n === 1 ? 'hidden' : 'visible';
+var nextBtn = $('#btnNext');
+if (n === TOTAL) {
+nextBtn.classList.add('hidden');
+} else {
+nextBtn.classList.remove('hidden');
+nextBtn.textContent = 'Continuar';
+}
+if (n === TOTAL) renderSummary();
+updateProgress();
+window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setFieldError(fieldEl, msg) {
+if (!fieldEl) return;
+fieldEl.classList.toggle('has-error', !!msg);
+var err = $('.field-error', fieldEl);
+if (err) { if (msg) err.textContent = msg; err.style.display = msg ? 'block' : 'none'; }
+}
+
+function clearFieldError(fieldEl) { setFieldError(fieldEl, null); }
+
+function getRadio(name) {
+var r = document.querySelector('input[name="' + name + '"]:checked');
+return r ? r.value : '';
+}
+
+function setRadio(name, value) {
+var r = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+if (r) r.checked = true;
+}
+
+function getChecked(groupId) {
+return $$('#' + groupId + ' input:checked').map(function (i) { return i.value; });
+}
+
+function setChecked(groupId, values) {
+values = values || [];
+$$('#' + groupId + ' input').forEach(function (i) { i.checked = values.indexOf(i.value) !== -1; });
+}
+
+function refreshCheckStyles() {
+$$('.check-item, .radio-pill').forEach(function (l) {
+var inp = $('input', l);
+l.classList.toggle('checked', !!(inp && inp.checked));
+});
+}
+
+function calcIMC() {
+var h = parseFloat($('#altura').value);
+var w = parseFloat($('#peso').value);
+var val = $('#imcValue'), cap = $('#imcCaption'), cls = $('#imcClass');
+if (!h || !w || h < 100 || w < 30) {
+val.textContent = '--';
+cap.textContent = 'Preencha altura e peso para ver seu índice de massa corporal.';
+cls.textContent = 'Aguardando dados';
+$$('#imcScale span').forEach(function (s) { s.classList.remove('on'); });
+return null;
+}
+var m = h / 100;
+var imc = w / (m * m);
+var key, label;
+if (imc < 18.5) { key = 'baixo'; label = 'Baixo peso'; }
+else if (imc < 25) { key = 'eutrofico'; label = 'Eutrófico (peso adequado)'; }
+else if (imc < 30) { key = 'sobrepeso'; label = 'Sobrepeso'; }
+else if (imc < 35) { key = 'ob1'; label = 'Obesidade grau I'; }
+else if (imc < 40) { key = 'ob2'; label = 'Obesidade grau II'; }
+else { key = 'ob3'; label = 'Obesidade grau III'; }
+val.textContent = imc.toFixed(1).replace('.', ',');
+cap.textContent = 'Seu IMC atual. Use como referência inicial, não como diagnóstico.';
+cls.textContent = label;
+$$('#imcScale span').forEach(function (s) { s.classList.toggle('on', s.dataset.k === key); });
+return { value: imc, label: label };
+}
+
+function formatPhone(v) {
+var d = (v || '').replace(/\D/g, '').slice(0, 11);
+if (d.length === 0) return '';
+if (d.length <= 2) return '(' + d;
+if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+}
+
+function validPhone(v) {
+var d = (v || '').replace(/\D/g, '');
+return d.length === 10 || d.length === 11;
+}
+
+function parqHasYes() {
+return Object.keys(parqAnswers).some(function (k) { return parqAnswers[k] === 'sim'; });
+}
+
+function renderParq() {
+$$('#parqList .yn-row').forEach(function (row) {
+var key = row.dataset.yn;
+var val = parqAnswers[key] || '';
+row.classList.toggle('is-yes', val === 'sim');
+$$('.yn-btn', row).forEach(function (b) {
+b.classList.remove('on-no', 'on-yes');
+if (b.dataset.val === val) b.classList.add(val === 'sim' ? 'on-yes' : 'on-no');
+});
+});
+}
+
+function collect() {
+return {
+nome: $('#nome').value.trim(),
+idade: $('#idade').value,
+sexo: getRadio('sexo'),
+telefone: $('#telefone').value,
+cidade: $('#cidade').value.trim(),
+altura: $('#altura').value,
+peso: $('#peso').value,
+parq: parqAnswers,
+parqDetalhe: $('#parqDetail').value.trim(),
+condicoes: getChecked('condGroup'),
+medicamentos: $('#medicamentos').value.trim(),
+objetivo: getRadio('objetivo'),
+nivel: getRadio('nivel'),
+dias: getChecked('diasGroup'),
+tempoSessao: getRadio('tempo'),
+local: $('#local').value,
+sono: $('#sono').value,
+dificuldade: $('#dificuldade').value.trim(),
+consent: $('#consent').checked
+};
+}
+
+function applyData(d) {
+if (!d) return;
+$('#nome').value = d.nome || '';
+$('#idade').value = d.idade || '';
+setRadio('sexo', d.sexo);
+$('#telefone').value = d.telefone || '';
+$('#cidade').value = d.cidade || '';
+$('#altura').value = d.altura || '';
+$('#peso').value = d.peso || '';
+parqAnswers = d.parq || {};
+$('#parqDetail').value = d.parqDetalhe || '';
+setChecked('condGroup', d.condicoes);
+$('#medicamentos').value = d.medicamentos || '';
+setRadio('objetivo', d.objetivo);
+setRadio('nivel', d.nivel);
+setChecked('diasGroup', d.dias);
+setRadio('tempo', d.tempoSessao);
+$('#local').value = d.local || '';
+$('#sono').value = d.sono || '';
+$('#dificuldade').value = d.dificuldade || '';
+$('#consent').checked = !!d.consent;
+renderParq();
+refreshCheckStyles();
+calcIMC();
+}
+
+function saveDraft() {
+var d = collect();
+d.savedAt = new Date().toISOString();
+store.set(d);
+var badge = $('#saveBadge');
+badge.textContent = 'Rascunho salvo às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function scheduleSave() {
+clearTimeout(saveTimer);
+saveTimer = setTimeout(saveDraft, 350);
+}
+
+function validateStep(n) {
+var ok = true;
+var firstBad = null;
+function bad(el) { if (!firstBad) firstBad = el; ok = false; }
+
+if (n === 1) {
+var nomeField = $('#nome').closest('.field');
+if (!$('#nome').value.trim()) {
+setFieldError(nomeField, 'Informe seu nome completo.');
+bad($('#nome'));
+} else clearFieldError(nomeField);
+
+var telField = $('#telefone').closest('.field');
+if (!validPhone($('#telefone').value)) {
+setFieldError(telField, 'Informe um WhatsApp válido com DDD (10 ou 11 dígitos).');
+bad($('#telefone'));
+} else clearFieldError(telField);
+
+var altVal = parseFloat($('#altura').value);
+var altField = $('#altura').closest('.field');
+if (!(altVal >= 100 && altVal <= 230)) {
+setFieldError(altField, 'Informe uma altura entre 100 e 230 cm.');
+bad($('#altura'));
+} else clearFieldError(altField);
+
+var pesoVal = parseFloat($('#peso').value);
+var pesoField = $('#peso').closest('.field');
+if (!(pesoVal >= 30 && pesoVal <= 300)) {
+setFieldError(pesoField, 'Informe um peso entre 30 e 300 kg.');
+bad($('#peso'));
+} else clearFieldError(pesoField);
+}
+
+if (n === 2) {
+var detailWrap = $('#parqDetailWrap');
+var need = parqHasYes();
+var detail = $('#parqDetail').value.trim();
+if (need && !detail) {
+setFieldError(detailWrap, 'Descreva ao menos brevemente as respostas "sim".');
+bad($('#parqDetail'));
+} else clearFieldError(detailWrap);
+var missing = Object.keys({ cardio: 1, peito: 1, tontura: 1, osseo: 1, medic: 1, outro: 1 }).filter(function (k) { return !parqAnswers[k]; });
+if (missing.length) {
+ok = false;
+$('#parqList').scrollIntoView({ behavior: 'smooth', block: 'center' });
+window.skipUI.toast('Responda todas as perguntas de triagem de saúde.', { type: 'error' });
+return false;
+}
+}
+
+if (n === 3) {
+var objErr = $('#objetivoErr');
+if (!getRadio('objetivo')) {
+objErr.style.display = 'block';
+bad($('#objetivoGroup'));
+} else objErr.style.display = 'none';
+}
+
+if (n === 3) {
+var diasErr = $('#diasErr');
+if (getChecked('diasGroup').length === 0) {
+diasErr.style.display = 'block';
+bad($('#diasGroup'));
+} else diasErr.style.display = 'none';
+}
+
+if (!ok) {
+window.skipUI.toast('Revise os campos destacados em vermelho.', { type: 'error' });
+if (firstBad && firstBad.scrollIntoView) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+if (firstBad && firstBad.focus) firstBad.focus();
+}
+return ok;
+}
+
+function summaryCard(title, rows) {
+var html = '<div class="summary-card"><h3>' + title + '</h3><dl>';
+rows.forEach(function (r) {
+html += '<dt>' + r[0] + '</dt><dd>' + (r[1] ? escapeHtml(String(r[1])) : '<span style="color:var(--text-muted)">Não informado</span>') + '</dd>';
+});
+return html + '</dl></div>';
+}
+
+function escapeHtml(s) {
+return s.replace(/[&<>"']/g, function (c) {
+return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+});
+}
+
+var LABELS = {
+objetivo: { emagrecimento: 'Emagrecimento', hipertrofia: 'Hipertrofia', forca: 'Ganho de força', condicionamento: 'Condicionamento', saude: 'Saúde geral', reabilitacao: 'Reabilitação', definicao: 'Definição' },
+nivel: { iniciante: 'Iniciante', intermediario: 'Intermediário', avancado: 'Avançado' },
+sexo: { masculino: 'Masculino', feminino: 'Feminino', outro: 'Outro' },
+tabaco: { nao: 'Não fumo', ex: 'Ex-fumante', atual: 'Fumante atual' },
+alcool: { nao: 'Não bebe', social: 'Social', frequente: 'Frequente' },
+horario: { manha: 'Manhã', tarde: 'Tarde', noite: 'Noite', varia: 'Varia' },
+local: { 'academia-completa': 'Academia completa', 'academia-basica': 'Academia básica', condominio: 'Academia de condomínio', 'casa-equip': 'Casa com equipamentos', 'casa-sem': 'Casa sem equipamentos', 'ar-livre': 'Ao ar livre' },
+dias: { seg: 'Seg', ter: 'Ter', qua: 'Qua', qui: 'Qui', sex: 'Sex', sab: 'Sáb', dom: 'Dom' },
+condicoes: { hipertensao: 'Hipertensão', diabetes: 'Diabetes', colesterol: 'Colesterol alto', asma: 'Asma / bronquite', hernia: 'Hérnia de disco', lesao: 'Lesão articular', tendinite: 'Tendinite', cirurgia: 'Cirurgia recente', ansiedade: 'Ansiedade / depressão', nenhuma: 'Nenhuma' }
+};
+
+function label(map, v) { return map[v] || v; }
+
+function renderSummary() {
+var d = collect();
+var imc = calcIMC();
+var imcTxt = imc ? imc.value.toFixed(1).replace('.', ',') + ' · ' + imc.label : '';
+var dias = d.dias.map(function (x) { return label(LABELS.dias, x); }).join(', ');
+var conds = d.condicoes.map(function (x) { return label(LABELS.condicoes, x); }).join(', ');
+var html = '';
+html += summaryCard('Dados', [
+['Nome', d.nome], ['Idade', d.idade], ['Sexo', label(LABELS.sexo, d.sexo)],
+['WhatsApp', d.telefone], ['Cidade', d.cidade],
+['Altura / peso', d.altura && d.peso ? d.altura + ' cm · ' + d.peso + ' kg' : ''], ['IMC', imcTxt]
+]);
+html += summaryCard('Saúde', [
+['Triagem', parqHasYes() ? 'Há respostas SIM' : 'Nenhuma condição relatada'], ['Detalhe', d.parqDetalhe],
+['Condições', conds], ['Medicamentos', d.medicamentos]
+]);
+html += summaryCard('Objetivo e rotina', [
+['Objetivo', label(LABELS.objetivo, d.objetivo)], ['Nível', label(LABELS.nivel, d.nivel)],
+['Dias', dias], ['Tempo por sessão', d.tempoSessao ? d.tempoSessao + ' min' : ''],
+['Local', label(LABELS.local, d.local)], ['Sono', d.sono ? d.sono + ' h/noite' : ''],
+['Dificuldade', d.dificuldade]
+]);
+$('#summaryGrid').innerHTML = html;
+}
+
+function validateRequired() {
+var missing = [];
+var d = collect();
+if (!d.nome || d.nome.split(' ').filter(Boolean).length < 1) missing.push('Nome');
+if (!validPhone(d.telefone)) missing.push('WhatsApp (com DDD)');
+var h = parseFloat(d.altura), p = parseFloat(d.peso);
+if (!(h >= 100 && h <= 230)) missing.push('Altura');
+if (!(p >= 30 && p <= 300)) missing.push('Peso');
+return missing;
+}
+
+function buildWaMessage() {
+var d = collect();
+var imc = calcIMC();
+var yn = function (v) { return v === 'sim' ? 'SIM' : (v === 'nao' ? 'Não' : 'Não informado'); };
+var parqLabels = { cardio: 'Problema cardíaco', peito: 'Dor no peito', tontura: 'Tontura/desmaio', osseo: 'Problema ósseo/articular', medic: 'Medicamento contínuo', outro: 'Outra condição de saúde' };
+var triagem = Object.keys(parqLabels).filter(function (k) { return parqAnswers[k] === 'sim'; }).map(function (k) { return parqLabels[k]; });
+var condicoes = d.condicoes.map(function (x) { return label(LABELS.condicoes, x); });
+var dias = d.dias.map(function (x) { return label(LABELS.dias, x); });
+var lines = [
+'*ANAMNESE — NOVO ALUNO*',
+'',
+'*DADOS*',
+'Nome: ' + (d.nome || 'Não informado'),
+'Idade: ' + (d.idade || 'Não informado'),
+'Sexo: ' + (d.sexo ? label(LABELS.sexo, d.sexo) : 'Não informado'),
+'WhatsApp: ' + (d.telefone || 'Não informado'),
+'Cidade: ' + (d.cidade || 'Não informado'),
+'Altura: ' + (d.altura || '?') + ' cm',
+'Peso: ' + (d.peso || '?') + ' kg',
+'IMC: ' + (imc ? imc.value.toFixed(1).replace('.', ',') + ' (' + imc.label + ')' : 'Não calculado'),
+'',
+'*SAÚDE*',
+'Triagem: ' + (triagem.length ? triagem.join(', ') : 'Nenhuma condição relatada'),
+'Detalhes: ' + (d.parqDetalhe || 'Não informado'),
+'Condições: ' + (condicoes.length ? condicoes.join(', ') : 'Não informado'),
+'Medicamentos: ' + (d.medicamentos || 'Não informado'),
+'',
+'*OBJETIVO E ROTINA*',
+'Objetivo: ' + (d.objetivo ? label(LABELS.objetivo, d.objetivo) : 'Não informado'),
+'Nível: ' + (d.nivel ? label(LABELS.nivel, d.nivel) : 'Não informado'),
+'Dias: ' + (dias.length ? dias.join(', ') : 'Não informado'),
+'Tempo por sessão: ' + (d.tempoSessao ? d.tempoSessao + ' min' : 'Não informado'),
+'Local: ' + (d.local ? label(LABELS.local, d.local) : 'Não informado'),
+'Sono: ' + (d.sono ? d.sono + ' h' : 'Não informado'),
+'Dificuldade: ' + (d.dificuldade || 'Não informado')
+];
+return lines.join('\n');
+}
+
+function sendWhatsApp() {
+var missing = validateRequired();
+if (missing.length) {
+window.skipUI.toast('Preencha: ' + missing.join(', ') + '.', { type: 'error' });
+goTo(1);
+validateStep(1);
+return false;
+}
+var url = WA_URL + encodeURIComponent(buildWaMessage());
+window.open(url, '_blank');
+return true;
+}
+
+
+
+function resetAll() {
+store.set({});
+document.querySelectorAll('input[type="text"], input[type="tel"], input[type="number"], textarea').forEach(function (i) { i.value = ''; });
+document.querySelectorAll('select').forEach(function (s) { s.selectedIndex = 0; });
+document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(function (i) { i.checked = false; });
+parqAnswers = {};
+renderParq();
+refreshCheckStyles();
+calcIMC();
+$$('.has-error').forEach(function (f) { f.classList.remove('has-error'); });
+$('#saveBadge').textContent = 'Rascunho limpo';
+goTo(1);
+}
+
+function bindEvents() {
+$('#btnNext').addEventListener('click', function () {
+if (!validateStep(current)) return;
+saveDraft();
+goTo(Math.min(TOTAL, current + 1));
+window.skipUI.toast('Etapa ' + current + ' concluída!', { type: 'success' });
+});
+$('#btnBack').addEventListener('click', function () {
+goTo(Math.max(1, current - 1));
+});
+
+$('#telefone').addEventListener('input', function () {
+this.value = formatPhone(this.value);
+scheduleSave();
+});
+
+['altura', 'peso'].forEach(function (id) {
+$('#' + id).addEventListener('input', function () { calcIMC(); scheduleSave(); });
+});
+
+$$('#parqList .yn-btn').forEach(function (b) {
+b.addEventListener('click', function () {
+var key = this.closest('.yn-row').dataset.yn;
+parqAnswers[key] = this.dataset.val;
+renderParq();
+scheduleSave();
+});
+});
+
+$$('.check-item input, .radio-pill input').forEach(function (i) {
+i.addEventListener('change', function () { refreshCheckStyles(); scheduleSave(); });
+});
+
+$$('.field-error').forEach(function () {});
+$$('input, select, textarea').forEach(function (el) {
+if (el.id === 'telefone' || el.id === 'altura' || el.id === 'peso') return;
+el.addEventListener('input', scheduleSave);
+el.addEventListener('change', scheduleSave);
+});
+
+$('#consent').addEventListener('change', function () {
+$('#consentWrap').classList.remove('invalid');
+$('#consentErr').style.display = 'none';
+scheduleSave();
+});
+
+$('#btnReset').addEventListener('click', function () {
+resetAll();
+window.skipUI.toast('Formulário limpo.');
+});
+$('#dlgReset').addEventListener('click', function () {
+$('#dlgSaved').close();
+resetAll();
+});
+
+$('#btnSubmit').addEventListener('click', function () {
+if (!$('#consent').checked) {
+$('#consentWrap').classList.add('invalid');
+$('#consentErr').style.display = 'block';
+window.skipUI.toast('Aceite o consentimento para enviar.', { type: 'error' });
+return;
+}
+saveDraft();
+if (!sendWhatsApp()) return;
+$('#btnSubmit').closest('.card-cut').classList.add('hidden');
+$('#finalCard').classList.remove('hidden');
+$('#wizardNav').classList.add('hidden');
+window.skipUI.toast('Anamnese pronta para envio no WhatsApp!', { type: 'success' });
+window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+$('#btnReopen').addEventListener('click', function () {
+window.open(WA_URL + encodeURIComponent(buildWaMessage()), '_blank');
+});
+
+$('#btnNewForm').addEventListener('click', function () {
+$('#finalCard').classList.add('hidden');
+$('#wizardNav').classList.remove('hidden');
+resetAll();
+});
+}
+
+function init() {
+buildDots();
+bindEvents();
+var saved = store.get();
+if (saved && saved.savedAt && (saved.nome || saved.telefone || saved.altura)) {
+applyData(saved);
+$('#saveBadge').textContent = 'Rascunho recuperado';
+var dlg = $('#dlgSaved');
+if (dlg && dlg.showModal) dlg.showModal();
+} else {
+renderParq();
+refreshCheckStyles();
+calcIMC();
+}
+goTo(1);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
